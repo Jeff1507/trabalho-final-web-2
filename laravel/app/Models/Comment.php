@@ -12,14 +12,14 @@ class Comment extends Model
         'content',
         'isRemoved',
         'user_id',
-        'movie_id'
+        'review_id'
     ];
 
     public function user() {
         return $this->belongsTo(User::class);
     }
 
-    public function movie() {
-        return $this->belongsTo(Movie::class);
+    public function review() {
+        return $this->belongsTo(Review::class);
     }
 }

@@ -17,8 +17,8 @@ return new class extends Migration
             $table->boolean('isRemoved')->default(false);
             $table->unsignedBigInteger('user_id')->index();
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
-            $table->unsignedBigInteger('movie_id')->index();
-            $table->foreign('movie_id')->references('id')->on('movies')->onDelete('cascade');
+            $table->unsignedBigInteger('review_id')->index();
+            $table->foreign('review_id')->references('id')->on('reviews')->onDelete('cascade');
             $table->timestamps();
         });
     }
