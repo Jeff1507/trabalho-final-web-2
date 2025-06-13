@@ -20,6 +20,6 @@ class MovieController extends Controller
     {
         $movie = $tmdb->getMovie($id);
 
-        return response()->json($movie);
+        return view('movie.show')->with(['movie'=>$movie]);
     }
 }
