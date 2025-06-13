@@ -19,7 +19,12 @@ class MovieController extends Controller
     public function show($id, TMDBService $tmdb)
     {
         $movie = $tmdb->getMovie($id);
+        $directors = collect($movie['credits']['crew'])
+            ->where('job', 'Director')
+            ->pluck('name')
+            ->unique()
+            ->implode(', ');
 
-        return view('movie.show')->with(['movie'=>$movie]);
+        return view('movie.show')->with(['movie'=>$movie, 'directors'=>$directors]);
     }
 }

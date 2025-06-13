@@ -33,6 +33,7 @@ class TMDBService
         ])->get("{$this->baseUrl}/movie/{$id}", [
             'api_key' => $this->apiKey,
             'language' => 'pt-BR',
+            'append_to_response' => 'credits',
         ])->json();
     }
 }
