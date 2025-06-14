@@ -14,10 +14,10 @@ return new class extends Migration
         Schema::create('reviews', function (Blueprint $table) {
             $table->id();
             $table->tinyInteger('rating');
+            $table->string('tmdb_id')->index();
             $table->unsignedBigInteger('user_id')->index();
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
-            $table->unsignedBigInteger('movie_id')->index();
-            $table->foreign('movie_id')->references('id')->on('movies')->onDelete('cascade');
+            $table->unique(['user_id', 'tmdb_id']);
             $table->timestamps();
         });
     }

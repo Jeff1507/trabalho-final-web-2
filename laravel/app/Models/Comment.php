@@ -11,13 +11,8 @@ class Comment extends Model
     protected $fillable = [
         'content',
         'isRemoved',
-        'user_id',
         'review_id'
     ];
-
-    public function user() {
-        return $this->belongsTo(User::class);
-    }
 
     public function review() {
         return $this->belongsTo(Review::class);

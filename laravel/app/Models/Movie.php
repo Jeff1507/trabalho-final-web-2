@@ -10,11 +10,11 @@ class Movie extends Model
 
     protected $fillable = [
         'title',
-        'original_title',
         'poster_url',
         'release_year',
-        'description',
-        'original_language',
+        'runtime',
+        'overview',
+        'status',
         'tmdb_id',
     ];
 

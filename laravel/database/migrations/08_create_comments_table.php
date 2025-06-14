@@ -15,8 +15,6 @@ return new class extends Migration
             $table->id();
             $table->text('content');
             $table->boolean('isRemoved')->default(false);
-            $table->unsignedBigInteger('user_id')->index();
-            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->unsignedBigInteger('review_id')->index();
             $table->foreign('review_id')->references('id')->on('reviews')->onDelete('cascade');
             $table->timestamps();

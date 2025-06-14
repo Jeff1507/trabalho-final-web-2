@@ -14,12 +14,11 @@ return new class extends Migration
         Schema::create('movies', function (Blueprint $table) {
             $table->id();
             $table->string('title')->index();
-            $table->string('original_title')->nullable();
             $table->string('poster_url')->nullable();
             $table->year('release_year');
-            $table->text('description')->nullable();
-            $table->string('original_language', 5)->nullable();
-            //$table->enum('status', ['Assistido', 'Para ver', 'Abandonado']);
+            $table->string('runtime');
+            $table->text('overview')->nullable();
+            $table->enum('status', ['Assistido', 'Para ver', 'Abandonado']);
             $table->string('tmdb_id')->unique();
             $table->timestamps();
         });
