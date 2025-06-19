@@ -12,9 +12,13 @@ class MovieController extends Controller
     public function search(Request $request, TMDBService $tmdb)
     {
         $query = $request->input('query');
-        $movies = $tmdb->searchMovies($query);
+        $movies = [];
+        if ($query) {
+            $results = $tmdb->searchMovies($query);
+            $movies = array_slice($results['results'] ?? [], 0, 12); 
+        }
 
-        return response()->json($movies);
+        return view('movie.search')->with(['movies'=>$movies]);
     }
 
     public function show($id, TMDBService $tmdb)

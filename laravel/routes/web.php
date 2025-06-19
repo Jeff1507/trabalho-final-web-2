@@ -14,7 +14,7 @@ Route::get('/dashboard', function () {
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
-    Route::get('/search', [MovieController::class, 'search']);
+    Route::get('/search', [MovieController::class, 'search'])->name('movie.search');
     Route::get('/movie/{id}', [MovieController::class, 'show'])->name('movie.show');
 
     Route::resource('/review', ReviewController::class);

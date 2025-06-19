@@ -53,7 +53,7 @@
             </div>    
         </div>
     </section>
-    <section class="flex flex-col gap-4 mt-16">
+    <section class="flex flex-col gap-12 mt-16">
         <h2 class="text-xl sm:text-3xl text-zinc-200 font-bold tracking-wide">
             Avaliações
         </h2>
@@ -62,35 +62,32 @@
                 <div class="flex items-center gap-2">
                     <x-heroicon-s-user-circle class="w-14 h-14 text-zinc-200"/>
                     <div class="flex-1 flex items-center justify-between">
-                        <div class="space-y-1 ">
+                        <div class="space-y-1">
                             <p class="text-zinc-200 text-sm font-semibold">
                                 {{ $review->user->name }}
                             </p>
-                            <p class="text-zinc-400 text-sm">
-                                {{ $review->created_at->format('d/m/Y') }}
-                            </p>
-                        </div>
-                        <div class="flex items-center gap-4">
-                            <div class="flex items-center gap-1">
-                                @for($i = 1; $i <= $review->rating; $i++)
-                                    @if ($i <= $review->rating)
-                                        <x-heroicon-c-star class="w-5 h-5 text-yellow-400" />
-                                    @else
-                                        <x-heroicon-c-star class="w-5 h-5 text-gray-400" />
-                                    @endif
-                                @endfor
+                            <div class="flex items-center gap-2">
+                                <div class="flex items-center gap-1">
+                                    @for($i = 1; $i <= 5; $i++)
+                                        @if ($i <= $review->rating)
+                                            <x-heroicon-c-star class="w-2.5 h-2.5 text-yellow-400" />
+                                        @else
+                                            <x-heroicon-c-star class="w-2.5 h-2.5 text-zinc-400" />
+                                        @endif
+                                    @endfor
+                                </div>
                             </div>
-                            <p class="text-zinc-200 font-bold text-lg">
-                                {{ $review->rating }}
-                            </p>
                         </div>
+                        <p class="text-zinc-400 text-sm">
+                            {{ $review->created_at->diffForHumans() }}
+                        </p>
                     </div>
                 </div>
                 <p class="text-sm text-zinc-400">
                     Nenhum comentario adicionado!
                 </p>
             </div>
-            <hr class="w-full h-px bg-zinc-400">
+            
         @endforeach
     </section>
 </x-app-layout>
