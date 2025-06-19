@@ -12,13 +12,17 @@ class MovieController extends Controller
     public function search(Request $request, TMDBService $tmdb)
     {
         $query = $request->input('query');
+        $page = $request->input('page', 1);
         $movies = [];
+        $total_pages = 0;
+        
         if ($query) {
-            $results = $tmdb->searchMovies($query);
-            $movies = array_slice($results['results'] ?? [], 0, 12); 
+            $results = $tmdb->searchMovies($query, $page);
+            $movies = $results['results'] ?? []; 
+            $total_pages = $results['total_pages'] ?? 1;
         }
 
-        return view('movie.search')->with(['movies'=>$movies]);
+        return view('movie.search')->with(['movies'=>$movies, 'query'=>$query, 'page'=>$page, 'total_pages'=>$total_pages]);
     }
 
     public function show($id, TMDBService $tmdb)

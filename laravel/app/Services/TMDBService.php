@@ -15,7 +15,7 @@ class TMDBService
         $this->apiKey = config('services.tmdb.key');
     }
 
-    public function searchMovies(string $query)
+    public function searchMovies(string $query, int $page = 1)
     {
         return Http::withOptions([
             'verify' => false,
@@ -23,6 +23,7 @@ class TMDBService
             'api_key' => $this->apiKey,
             'query' => $query,
             'language' => 'pt-BR',
+            'page' => $page
         ])->json();
     }
 

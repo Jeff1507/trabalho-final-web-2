@@ -13,7 +13,12 @@
                 <!-- Navigation Links -->
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
                     <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
-                        {{ __('Listas') }}
+                        <x-heroicon-c-film class="w-5 h-5 mr-2"/>
+                        {{ __('Listas de filmes') }}
+                    </x-nav-link>
+                    <x-nav-link :href="route('movie.search')" :active="request()->routeIs('movie.search')">
+                        <x-heroicon-c-magnifying-glass class="w-5 h-5 mr-2"/>
+                        {{ __('Buscar') }}
                     </x-nav-link>
                 </div>
             </div>
@@ -71,7 +76,10 @@
     <div :class="{'block': open, 'hidden': ! open}" class="hidden sm:hidden">
         <div class="pt-2 pb-3 space-y-1">
             <x-responsive-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
-                {{ __('Listas') }}
+                {{ __('Listas de filmes') }}
+            </x-responsive-nav-link>
+            <x-responsive-nav-link :href="route('movie.search')" :active="request()->routeIs('movie.search')">
+                {{ __('Buscar') }}
             </x-responsive-nav-link>
         </div>
 
