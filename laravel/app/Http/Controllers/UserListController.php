@@ -13,7 +13,7 @@ class UserListController extends Controller
     public function index()
     {
         $userLists = UserList::all();
-        return view('user_list.index')->with(['user_lists'=>$userLists]);
+        return view('movies-list.index')->with(['user_lists'=>$userLists]);
     }
 
     /**
@@ -21,7 +21,7 @@ class UserListController extends Controller
      */
     public function create()
     {
-        return view('user_list.create');
+        return view('movies-list.create');
     }
 
     /**
