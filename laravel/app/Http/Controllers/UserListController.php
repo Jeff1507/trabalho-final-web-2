@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\UserList;
 use Illuminate\Http\Request;
 
 class UserListController extends Controller
@@ -11,7 +12,8 @@ class UserListController extends Controller
      */
     public function index()
     {
-        //
+        $userLists = UserList::all();
+        return view('user_list.index')->with(['user_lists'=>$userLists]);
     }
 
     /**
@@ -19,7 +21,7 @@ class UserListController extends Controller
      */
     public function create()
     {
-        //
+        return view('user_list.create');
     }
 
     /**
@@ -27,7 +29,7 @@ class UserListController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        
     }
 
     /**

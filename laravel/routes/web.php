@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ReviewController;
+use App\Http\Controllers\UserListController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\MovieController;
 
@@ -17,6 +18,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/search', [MovieController::class, 'search'])->name('movie.search');
     Route::get('/movie/{id}', [MovieController::class, 'show'])->name('movie.show');
 
+    Route::resource('/movie-list', UserListController::class);
     Route::resource('/review', ReviewController::class);
 
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
