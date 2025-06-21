@@ -47,7 +47,12 @@
                         <x-heroicon-s-pencil class="w-5 h-5 mr-2"/>
                         Editar lista
                     </x-button>
-                    <x-button class="bg-red-500 text-white hover:bg-red-600">
+                    <x-button
+                        type="button" 
+                        x-data="" 
+                        x-on:click.prevent="$dispatch('open-modal', 'delete-movies-list')"
+                        class="bg-red-500 text-white hover:bg-red-600"
+                    >
                         <x-heroicon-s-trash class="w-5 h-5 mr-2"/>
                         Excluir lista
                     </x-button>
@@ -67,4 +72,24 @@
             asadasdas
         </div>
     </section>
+    <x-modal name="delete-movies-list" focusable maxWidth="lg">
+        <div class="p-6 flex flex-col gap-4">
+            <h2 class="text-2xl text-zinc-200 font-medium tracking-wide">
+                Deseja excluir essa lista?
+            </h2>
+            <p class="text-sm text-zinc-400">
+                Esta ação não poderá ser desfeita. Clique em <span class="font-bold">EXCLUIR</span> para confirmar.
+            </p>
+            <form method="POST" action="{{ route('movies-list.destroy', $user_list->id) }}" class="mt-4 w-full flex gap-4 items-center justify-end">
+                @csrf
+                @method('DELETE')
+                <x-button type="button" variant="text" x-on:click="$dispatch('close')">
+                    Cancelar
+                </x-button>
+                <x-button type="submit">
+                    Excluir
+                </x-button>
+            </form>
+        </div>
+    </x-modal>
 </x-app-layout>
