@@ -1,5 +1,6 @@
 <x-app-layout>
-    <form action="" method="POST" enctype="multipart/form-data" class="flex flex-col w-full gap-4 sm:gap-8">
+    <form action="{{ route('movies-list.store') }}" method="POST" enctype="multipart/form-data" class="flex flex-col w-full gap-4 sm:gap-8">
+        @csrf
         <h2 class="text-2xl sm:text-4xl text-zinc-200 font-bold tracking-wide">
             Nova Lista
         </h2>

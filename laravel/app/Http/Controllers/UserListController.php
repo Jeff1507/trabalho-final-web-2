@@ -4,12 +4,16 @@ namespace App\Http\Controllers;
 
 use App\Models\UserList;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Str;
 
 class UserListController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
+    private $path = "images/movies-list";
+
     public function index()
     {
         $userLists = UserList::all();
@@ -29,7 +33,31 @@ class UserListController extends Controller
      */
     public function store(Request $request)
     {
+        $request->validate([
+            'name' => 'required|string|min:3',
+            'img' => 'nullable|image|max:2048',
+            'description' => 'nullable|string|max:255'
+        ]);
+
+        $user = Auth::user();
+
+        $user_list = new UserList();
+        $user_list->name = mb_strtoupper($request->name, 'UTF-8');
+        $user_list->description = $request->description;
+        $user_list->user()->associate($user);
         
+        if ($request->hasFile('img') && $request->file('img')->isValid()) {
+            $arq = $request->file('img');
+            $nome_arq = Str::uuid() . '_' . time() . '.' . $arq->getClientOriginalExtension();
+
+            $arq->storeAs("public/$this->path", $nome_arq);
+
+            $user_list->img = $this->path . "/" . $nome_arq;
+        }
+
+        $user_list->save();
+
+        return redirect()->route('movies-list.index')->with('success', 'Lista criada com sucesso!');
     }
 
     /**
