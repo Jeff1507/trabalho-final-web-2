@@ -43,7 +43,7 @@
                         <x-heroicon-m-plus class="w-5 h-5 mr-2"/>
                         Adicionar filmes
                     </x-button>
-                    <x-button variant="tonal">
+                    <x-button variant="tonal" onclick="window.location.href='{{ route('movies-list.edit', $user_list->id) }}'">
                         <x-heroicon-s-pencil class="w-5 h-5 mr-2"/>
                         Editar lista
                     </x-button>
@@ -54,6 +54,15 @@
                 </div> 
             </div>
         </div>
+        @if (session('success'))
+            <x-alert type="success">
+                {{ session('success') }}
+            </x-alert>
+        @elseif (session('error'))
+            <x-alert type="error">
+                {{ session('error') }}
+            </x-alert>
+        @endif
         <div class="relative overflow-x-auto w-full">
             asadasdas
         </div>

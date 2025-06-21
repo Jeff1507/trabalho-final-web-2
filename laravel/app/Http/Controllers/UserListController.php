@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\UserList;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
 class UserListController extends Controller
@@ -16,7 +17,8 @@ class UserListController extends Controller
 
     public function index()
     {
-        $userLists = UserList::all();
+        $user = Auth::user();
+        $userLists = UserList::where('user_id', $user->id)->get();
         return view('movies-list.index')->with(['user_lists'=>$userLists]);
     }
 
@@ -66,6 +68,10 @@ class UserListController extends Controller
     public function show(string $id)
     {
         $user_list = UserList::findOrFail($id);
+        $user = Auth::user();
+        if ($user_list->user_id !== $user->id) {
+            return redirect()->back()->with('error', 'Você não tem permissão para realizar essa ação!');
+        }
         return view('movies-list.show')->with(['user_list'=>$user_list]);
     }
 
@@ -73,8 +79,13 @@ class UserListController extends Controller
      * Show the form for editing the specified resource.
      */
     public function edit(string $id)
-    {
-        //
+    {   
+        $user_list = UserList::findOrFail($id);
+        $user = Auth::user();
+        if ($user_list->user_id !== $user->id) {
+            return redirect()->back()->with('error', 'Você não tem permissão para realizar essa ação!');
+        }
+        return view('movies-list.edit')->with(['user_list'=>$user_list]);
     }
 
     /**
@@ -82,7 +93,39 @@ class UserListController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $user = Auth::user();
+        $user_list = UserList::findOrFail($id);
+
+        if ($user_list->user_id !== $user->id) {
+            return redirect()->back()->with('error', 'Você não tem permissão para realizar essa ação!');
+        }
+
+        $request->validate([
+            'name' => 'required|string|min:3',
+            'img' => 'nullable|image|max:2048',
+            'description' => 'nullable|string|max:255'
+        ]);
+        
+
+        $user_list->name = mb_strtoupper($request->name, 'UTF-8');
+        $user_list->description = $request->description;
+        $user_list->user()->associate($user);
+
+        if ($request->hasFile('img') && $request->file('img')->isValid()) {
+            if ($user_list->img && Storage::exists("public/{$user_list->img}")) {
+                Storage::delete("public/{$user_list->img}");
+            }
+            $arq = $request->file('img');
+            $nome_arq = Str::uuid() . '_' . time() . '.' . $arq->getClientOriginalExtension();
+
+            $arq->storeAs("public/$this->path", $nome_arq);
+
+            $user_list->img = $this->path . "/" . $nome_arq;
+        }
+
+        $user_list->save();
+
+        return redirect()->route('movies-list.show', $id)->with('success', 'Lista atualizada com sucesso!');
     }
 
     /**
@@ -90,6 +133,18 @@ class UserListController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $user = Auth::user();
+        $user_list = UserList::findOrFail($id);
+        if ($user_list->user_id !== $user->id) {
+            return redirect()->back()->with('error', 'Você não tem permissão para realizar essa ação!');
+        }
+
+        if ($user_list->img && Storage::exists("public/{$user_list->img}")) {
+            Storage::delete("public/{$user_list->img}");
+        }
+
+        $user_list->delete();
+
+        return redirect()->route('movies-list.index')->with('success', 'Lista excluida com sucesso!');
     }
 }

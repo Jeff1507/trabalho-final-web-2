@@ -8,6 +8,15 @@
                 </x-button>
             </x-not-found>
         @else
+            @if (session('success'))
+                <x-alert type="success">
+                    {{ session('success') }}
+                </x-alert>
+            @elseif (session('error'))
+                <x-alert type="error">
+                    {{ session('error') }}
+                </x-alert>
+            @endif
             <div class="flex items-center justify-between">
                 <x-title>
                     Suas listas
