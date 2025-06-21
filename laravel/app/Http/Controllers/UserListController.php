@@ -65,7 +65,8 @@ class UserListController extends Controller
      */
     public function show(string $id)
     {
-        //
+        $user_list = UserList::findOrFail($id);
+        return view('movies-list.show')->with(['user_list'=>$user_list]);
     }
 
     /**

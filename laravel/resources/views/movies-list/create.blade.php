@@ -1,9 +1,9 @@
 <x-app-layout>
     <form action="{{ route('movies-list.store') }}" method="POST" enctype="multipart/form-data" class="flex flex-col w-full gap-4 sm:gap-8">
         @csrf
-        <h2 class="text-2xl sm:text-4xl text-zinc-200 font-bold tracking-wide">
+        <x-title>
             Nova Lista
-        </h2>
+        </x-title>
         <div class="flex flex-col sm:flex-row gap-4 sm:gap-8">
             <label for="img" class="aspect-square size-56 sm:size-80 border-2 border-dashed border-zinc-400 rounded-2xl flex items-center justify-center cursor-pointer overflow-hidden">
                 <img id="preview" src="#" alt="Preview" class="hidden w-full object-cover"/>
