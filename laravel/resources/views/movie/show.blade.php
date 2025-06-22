@@ -123,9 +123,14 @@
                             <input type="hidden" name="overview" value="{{ $movie['overview'] }}">
                             {{--  --}}
 
-                            <div class="aspect-square bg-zinc-800 size-12 sm:size-16 flex items-center justify-center rounded-lg overflow-hidden">
-                                <img class="w-full object-cover" src="{{ asset('storage/' . $user_list->img) }}" alt="Imagem da lista">
-
+                            <div class="aspect-square size-12 sm:size-16 flex items-center justify-center rounded-lg overflow-hidden">
+                                @if ($user_list->img)
+                                    <img class="w-full object-cover" src="{{ asset('storage/' . $user_list->img) }}" alt="Imagem da lista">
+                                @else
+                                    <div class="w-full h-full flex bg-zinc-700 items-center justify-center">
+                                        <x-heroicon-s-photo class="w-5 h-5 text-zinc-400"/>
+                                    </div>
+                                @endif
                             </div>
                             <div class="flex-1 flex items-center gap-2 justify-between">
                                 <h3 class="text-sm text-zinc-200 font-bold line-clamp-2 flex-1">

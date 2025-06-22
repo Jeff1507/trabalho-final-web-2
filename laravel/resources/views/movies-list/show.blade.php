@@ -69,12 +69,67 @@
             </x-alert>
         @endif
         <div class="relative overflow-x-auto w-full">
-            <table>
-                <thead>
-                    <tr></tr>
+            <table class="w-full text-sm text-left rtl:text-right text-zinc-400">
+                <thead class="text-base text-zinc-200 border-b border-zinc-400">
+                    <tr>
+                        <th scope="col" class="px-6 py-3">
+                            #
+                        </th>
+                        <th scope="col" class="px-6 py-3">
+                            Filme
+                        </th>
+                        <th scope="col" class="px-6 py-3">
+                            Ano de lançamento
+                        </th>
+                        <th scope="col" class="px-6 py-3">
+                            Duração
+                        </th>
+                        <th scope="col" class="px-6 py-3">
+                            Adicionado em
+                        </th>
+                        <th scope="col" class="py-3">
+                            
+                        </th>
+                    </tr>
                 </thead>
                 <tbody>
-                    
+                    @foreach ($movies as $movie)
+                        <tr class="border-b border-zinc-400">
+                            <th scope="row" class="px-6 py-4 font-medium whitespace-nowrap text-zinc-200">
+                                {{ $movie->tmdb_id }}
+                            </th>
+                            <td class="px-6 py-4">
+                                <a href="{{ route('movie.show', $movie->tmdb_id) }}" class="flex items-center gap-2 group">
+                                    <div class="aspect-square size-8 sm:size-12 flex items-center justify-center rounded-lg overflow-hidden">
+                                        @if (false)
+                                            <img class="w-full object-cover" src="{{ $movie->poster_url }}" alt="Poster do filme">
+                                        @else
+                                            <div class="w-full h-full flex bg-zinc-700 items-center justify-center">
+                                                <x-heroicon-s-photo class="w-5 h-5 text-zinc-400"/>
+                                            </div>
+                                        @endif
+                                    </div>
+                                    <p class="text-zinc-200 group-hover:underline">
+                                        {{ $movie->title }}
+                                    </p>  
+                                </a>
+                            </td>
+                            <td class="px-6 py-4">
+                                {{ $movie->release_year }}
+                            </td>
+                            <td class="px-6 py-4">
+                                {{ $movie->runtime }} min
+                            </td>
+                            <td class="px-6 py-4">
+                                {{ $movie->pivot->created_at->format('d/m/Y') }}
+                            </td>
+                            <td class="py-4">
+                                <button>
+                                    <x-heroicon-s-trash class="w-5 h-5 text-red-500"/>
+                                </button>
+                            </td>
+                        </tr>
+                    @endforeach
                 </tbody>
             </table>
         </div>

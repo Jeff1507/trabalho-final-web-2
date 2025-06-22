@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\UserList;
+use App\Models\UserListMovie;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
@@ -68,11 +69,15 @@ class UserListController extends Controller
     public function show(string $id)
     {
         $user_list = UserList::findOrFail($id);
+
         $user = Auth::user();
         if ($user_list->user_id !== $user->id) {
             return redirect()->back()->with('error', 'Você não tem permissão para realizar essa ação!');
         }
-        return view('movies-list.show')->with(['user_list'=>$user_list]);
+
+        $movies = $user_list->movies;
+        //$movies = UserListMovie::with(['movie'])->where('user_list_id', $user_list->id)->get();
+        return view('movies-list.show')->with(['user_list'=>$user_list, 'movies'=>$movies]);
     }
 
     /**

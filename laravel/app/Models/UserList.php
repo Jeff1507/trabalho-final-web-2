@@ -18,4 +18,9 @@ class UserList extends Model
     public function user() {
         return $this->belongsTo(User::class);
     }
+
+    public function movies()
+{
+    return $this->belongsToMany(Movie::class, 'user_list_movies')->withTimestamps();
+}
 }

@@ -29,7 +29,6 @@
                 @foreach ($user_lists as $user_list)
                     <div class="w-44 sm:w-64 rounded-2xl overflow-hidden bg-zinc-800 flex flex-col justify-center">
                         <div class="flex items-center justify-center w-full h-44 sm:h-64 overflow-hidden">
-                            <!-- TODO: placeholder da imagem -->
                             @if($user_list->img)
                                 <img class="w-full object-cover" src="{{ asset('storage/' . $user_list->img) }}" alt="Imagem da lista">
                             @else
