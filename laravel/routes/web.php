@@ -20,6 +20,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/movie/{id}', [MovieController::class, 'show'])->name('movie.show');
 
     Route::resource('/movies-list', UserListController::class);
+    Route::delete('/movies-list/{user_list_id}/{movie_id}', [UserListController::class, 'removeMovieFromList'])->name('movies-list.removeMovieFromList');
     Route::resource('/review', ReviewController::class);
 
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

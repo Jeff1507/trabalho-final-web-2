@@ -152,4 +152,13 @@ class UserListController extends Controller
 
         return redirect()->route('movies-list.index')->with('success', 'Lista excluida com sucesso!');
     }
+
+    public function removeMovieFromList(string $user_list_id, string $movie_id)  {
+        UserListMovie::where([
+            'user_list_id'=>$user_list_id, 
+            'movie_id'=>$movie_id
+        ])->delete();
+        
+        return back()->with('success', 'Filme removido da lista!');
+    }
 }

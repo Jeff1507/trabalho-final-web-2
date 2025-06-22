@@ -1,4 +1,15 @@
 <x-app-layout>
+    <div class="mb-8">
+        @if (session('success'))
+            <x-alert type="success">
+                {{ session('success') }}
+            </x-alert>
+        @elseif (session('error'))
+            <x-alert type="error">
+                {{ session('error') }}
+            </x-alert>
+        @endif
+    </div>
     <section class="flex flex-col sm:flex-row items-center gap-4 sm:gap-8">
         @if ($movie['poster_path'])
             <img class="rounded-lg w-full sm:w-auto" src="https://image.tmdb.org/t/p/w300{{ $movie['poster_path'] }}" alt="{{ $movie['title'] }}">
@@ -56,18 +67,7 @@
             </div>    
         </div>
     </section>
-    <div class="w-full my-16">
-        @if (session('success'))
-            <x-alert type="success">
-                {{ session('success') }}
-            </x-alert>
-        @elseif (session('error'))
-            <x-alert type="error">
-                {{ session('error') }}
-            </x-alert>
-        @endif
-    </div>
-    <section class="flex flex-col gap-12">
+    <section class="flex flex-col gap-12 mt-16">
         <h2 class="text-xl sm:text-3xl text-zinc-200 font-bold tracking-wide">
             Avaliações
         </h2>
