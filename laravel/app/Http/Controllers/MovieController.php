@@ -2,10 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Movie;
 use App\Models\Review;
+use App\Models\UserList;
+use App\Models\UserListMovie;
 use App\Services\TMDBService;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Auth;
 
 class MovieController extends Controller
 {
@@ -28,13 +31,58 @@ class MovieController extends Controller
     public function show($id, TMDBService $tmdb)
     {
         $movie = $tmdb->getMovie($id);
+
         $reviews = Review::where('tmdb_id', $movie['id'])->get();
+
+        $user_lists = UserList::where('user_id', Auth::user()->id)->get();
+
         $directors = collect($movie['credits']['crew'])
             ->where('job', 'Director')
             ->pluck('name')
             ->unique()
             ->implode(', ');
 
-        return view('movie.show')->with(['movie'=>$movie, 'directors'=>$directors, 'reviews'=>$reviews]);
+        return view('movie.show')->with(['movie'=>$movie, 'directors'=>$directors, 'reviews'=>$reviews, 'user_lists'=>$user_lists]);
+    }
+
+    public function addToList(Request $request)  {
+        try {
+            $request->validate([
+                'user_list_id' => 'required|exists:user_lists,id',
+                'tmdb_id' => 'required|string',
+                'title' => 'required|string',
+                'poster_url' => 'nullable|string',
+                'release_year' => 'required|string',
+                'runtime' => 'required|string',
+                'overview' => 'nullable|string'
+            ]);
+
+            // Verifica se o filme ja existe
+            // Se ja existir, pega o id
+            // Se nao existir cria um novo
+            $movie = Movie::firstOrCreate(
+                ['tmdb_id' => $request->tmdb_id],
+                [
+                    'title' => $request->title,
+                    'poster_url' => $request->poster_url,
+                    'release_year' => substr($request->release_year, 0, 4),
+                    'runtime' => $request->runtime,
+                    'overview' => $request->overview,
+                ]
+            );
+
+            // Acha a lista
+            $user_list = UserList::findOrFail($request->user_list_id);
+
+            // Relaciona o filme com a lista
+            UserListMovie::create([
+                'user_list_id' => $user_list->id,
+                'movie_id' => $movie->id
+            ]);
+
+            return back()->with('success', 'Filme adicionado à lista com sucesso!');
+        } catch (\Throwable $th) {
+            return back()->with('error', 'Filme já adicionado!');
+        }
     }
 }

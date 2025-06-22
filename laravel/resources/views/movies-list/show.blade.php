@@ -39,7 +39,7 @@
                     </div>
                 </div>
                 <div class="w-full flex items-center gap-4 mt-8">
-                    <x-button>
+                    <x-button onclick="window.location.href='{{ route('movie.search') }}'">
                         <x-heroicon-m-plus class="w-5 h-5 mr-2"/>
                         Adicionar filmes
                     </x-button>
@@ -69,9 +69,18 @@
             </x-alert>
         @endif
         <div class="relative overflow-x-auto w-full">
-            asadasdas
+            <table>
+                <thead>
+                    <tr></tr>
+                </thead>
+                <tbody>
+                    
+                </tbody>
+            </table>
         </div>
     </section>
+
+    {{-- MODAL PARA DELETAR LISTA --}}
     <x-modal name="delete-movies-list" focusable maxWidth="lg">
         <div class="p-6 flex flex-col gap-4">
             <h2 class="text-2xl text-zinc-200 font-medium tracking-wide">

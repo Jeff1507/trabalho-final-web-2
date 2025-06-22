@@ -14,8 +14,6 @@ class Movie extends Model
         'release_year',
         'runtime',
         'overview',
-        'status',
         'tmdb_id',
     ];
-
 }

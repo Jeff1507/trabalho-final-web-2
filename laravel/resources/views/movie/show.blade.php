@@ -47,13 +47,27 @@
                 </div>
             </div>
             <div class="w-full mt-4">
-                <x-button>
+                <x-button type="button" 
+                    x-data="" 
+                    x-on:click.prevent="$dispatch('open-modal', 'add-movie')"
+                >
                     Adicionar a uma lista
                 </x-button>
             </div>    
         </div>
     </section>
-    <section class="flex flex-col gap-12 mt-16">
+    <div class="w-full my-16">
+        @if (session('success'))
+            <x-alert type="success">
+                {{ session('success') }}
+            </x-alert>
+        @elseif (session('error'))
+            <x-alert type="error">
+                {{ session('error') }}
+            </x-alert>
+        @endif
+    </div>
+    <section class="flex flex-col gap-12">
         <h2 class="text-xl sm:text-3xl text-zinc-200 font-bold tracking-wide">
             Avaliações
         </h2>
@@ -87,7 +101,49 @@
                     Nenhum comentario adicionado!
                 </p>
             </div>
-            
         @endforeach
+
+        {{-- MODAL PARA MOSTRAR AS LISTAS --}}
+        <x-modal name="add-movie" focusable maxWidth="lg">
+            <div class="p-4 sm:p-6 flex flex-col gap-6 sm:gap-8">
+                <h2 class="text-xl sm:text-3xl text-zinc-200 font-medium tracking-wide">
+                    Escolha uma lista
+                </h2>
+                <div class="w-full space-y-2 max-h-[500px] overflow-y-auto">
+                    @foreach ($user_lists as $user_list)
+                        <form action="{{ route('movie.addToList') }}" method="POST" class="flex gap-4 p-2 max-h-20">
+                            @csrf
+                            {{-- CAMPOS QUE SERAO SALVOS --}}
+                            <input type="hidden" name="user_list_id" value="{{ $user_list->id }}">
+                            <input type="hidden" name="tmdb_id" value="{{ $movie['id'] }}">
+                            <input type="hidden" name="title" value="{{ $movie['title'] }}">
+                            <input type="hidden" name="poster_url" value="{{ $movie['poster_path'] }}">
+                            <input type="hidden" name="release_year" value="{{ $movie['release_date'] }}">
+                            <input type="hidden" name="runtime" value="{{ $movie['runtime'] }}">
+                            <input type="hidden" name="overview" value="{{ $movie['overview'] }}">
+                            {{--  --}}
+
+                            <div class="aspect-square bg-zinc-800 size-12 sm:size-16 flex items-center justify-center rounded-lg overflow-hidden">
+                                <img class="w-full object-cover" src="{{ asset('storage/' . $user_list->img) }}" alt="Imagem da lista">
+
+                            </div>
+                            <div class="flex-1 flex items-center gap-2 justify-between">
+                                <h3 class="text-sm text-zinc-200 font-bold line-clamp-2 flex-1">
+                                    {{ $user_list->name }}
+                                </h3>
+                                <x-button class="h-8 w-1/3" variant="tonal" type="submit">
+                                    Salvar
+                                </x-button>
+                            </div>
+                        </form>
+                    @endforeach
+                </div>
+                <div class="w-full flex items-center justify-end">
+                    <x-button x-on:click="$dispatch('close')">
+                        Concluido
+                    </x-button>
+                </div>
+            </div>
+        </x-modal>
     </section>
 </x-app-layout>

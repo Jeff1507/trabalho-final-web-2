@@ -18,7 +18,6 @@ return new class extends Migration
             $table->year('release_year');
             $table->string('runtime');
             $table->text('overview')->nullable();
-            //$table->enum('status', ['Assistido', 'Para ver', 'Abandonado']);
             $table->string('tmdb_id')->unique();
             $table->timestamps();
         });

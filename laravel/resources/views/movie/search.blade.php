@@ -19,7 +19,7 @@
             <a href="{{ route('movie.show', $movie['id']) }}" class="space-y-2 group">
                 <div class="h-64 sm:h-80">
                     @if ($movie['poster_path'])
-                        <img class="mx-auto h-full rounded-lg" src="https://image.tmdb.org/t/p/w300{{ $movie['poster_path'] }}" alt="{{ $movie['title'] }}">
+                        <img class="w-full h-full object-cover rounded-lg" src="https://image.tmdb.org/t/p/original{{ $movie['poster_path'] }}" alt="{{ $movie['title'] }}">
                     @else
                         <div class="mx-auto h-full border border-dashed border-zinc-400 p-2 rounded-lg flex flex-col gap-1 items-center justify-center text-zinc-400">
                             <x-heroicon-s-photo class="w-10 h-10 sm:w-16 sm:h-16"/>
@@ -29,7 +29,7 @@
                         </div>
                     @endif
                 </div>
-                <h2 class="text-zinc-200 font-semibold text-base sm:text-lg text-center line-clamp-2 group-hover:text-[#D0BCFF] group-hover:underline">
+                <h2 class="text-zinc-200 font-semibold text-base sm:text-lg line-clamp-2 group-hover:text-[#D0BCFF] group-hover:underline">
                     {{ $movie['title'] }}
                 </h2>
             </a>
