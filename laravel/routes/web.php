@@ -1,5 +1,6 @@
 <?php
 
+use App\Facades\Permissions;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\UserListController;
@@ -21,7 +22,8 @@ Route::middleware('auth')->group(function () {
 
     Route::resource('/movies-list', UserListController::class);
     Route::delete('/movies-list/{user_list_id}/{movie_id}', [UserListController::class, 'removeMovieFromList'])->name('movies-list.removeMovieFromList');
-    Route::resource('/review', ReviewController::class);
+
+    Route::post('/movie/review', [ReviewController::class, 'store'])->name('review.store');
 
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
@@ -29,7 +31,7 @@ Route::middleware('auth')->group(function () {
 });
 
 Route::get('/facade/test', function () {
-return Permissions::test();
+    return Permissions::test();
 });
 
 

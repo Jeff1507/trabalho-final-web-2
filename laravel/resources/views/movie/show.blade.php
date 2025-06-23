@@ -1,15 +1,13 @@
 <x-app-layout>
-    <div class="mb-8">
-        @if (session('success'))
-            <x-alert type="success">
-                {{ session('success') }}
-            </x-alert>
-        @elseif (session('error'))
-            <x-alert type="error">
-                {{ session('error') }}
-            </x-alert>
-        @endif
-    </div>
+    @if (session('success'))
+        <x-alert type="success" class="mb-8">
+            {{ session('success') }}
+        </x-alert>
+    @elseif (session('error'))
+        <x-alert type="error" class="mb-8">
+            {{ session('error') }}
+        </x-alert>
+    @endif
     <section class="flex flex-col sm:flex-row items-center gap-4 sm:gap-8">
         @if ($movie['poster_path'])
             <img class="rounded-lg w-full sm:w-auto" src="https://image.tmdb.org/t/p/w300{{ $movie['poster_path'] }}" alt="{{ $movie['title'] }}">
@@ -69,10 +67,13 @@
             @endcan
         </div>
     </section>
-    <section class="flex flex-col gap-12 mt-16">
-        <h2 class="text-xl sm:text-3xl text-zinc-200 font-bold tracking-wide">
-            Avaliações
-        </h2>
+    <section class="flex flex-col gap-12 mt-32">
+        <x-button type="button" 
+                        x-data="" 
+                        x-on:click.prevent="$dispatch('open-modal', 'add-review')"
+                    >
+                       review
+                    </x-button>
         @foreach ($reviews as $review)
             <div class="flex flex-col gap-2">
                 <div class="flex items-center gap-2">
@@ -100,6 +101,7 @@
                     </div>
                 </div>
                 <p class="text-sm text-zinc-400">
+                    
                     Nenhum comentario adicionado!
                 </p>
             </div>
@@ -151,6 +153,50 @@
                     </x-button>
                 </div>
             </div>
+        </x-modal>
+
+        {{-- MODAL PARA ADICIONAR REVIEW --}}
+        <x-modal name="add-review" focusable maxWidth="lg">
+            <form action="{{ route('review.store') }}" method="POST" class="flex flex-col items-center justify-center gap-4 p-8" x-data="{ rating: 0 }">
+                @csrf
+                <x-heroicon-s-user-circle class="w-16 h-16 text-zinc-200"/>
+
+                <h3 class="text-lg text-zinc-200 font-medium">
+                    O que você achou do filme?
+                </h3>
+
+                <div class="flex items-center gap-1">
+                    <template x-for="i in 5" :key="i">
+                        <svg 
+                            @click="rating = i" 
+                            :class="i <= rating ? 'text-yellow-400' : 'text-zinc-400'" 
+                            class="w-8 h-8 cursor-pointer transition-colors duration-200 fill-current"
+                            xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+                            <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.974a1 1 0 00.95.69h4.18c.969 0 1.371 1.24.588 1.81l-3.388 2.46a1 1 0 00-.364 1.118l1.287 3.974c.3.921-.755 1.688-1.538 1.118l-3.388-2.46a1 1 0 00-1.175 0l-3.388 2.46c-.783.57-1.838-.197-1.538-1.118l1.287-3.974a1 1 0 00-.364-1.118L2.045 9.4c-.783-.57-.38-1.81.588-1.81h4.18a1 1 0 00.95-.69l1.286-3.974z"/>
+                        </svg>
+                    </template>
+                </div>
+
+                <input type="hidden" name="rating" x-ref="input" :value="rating">
+                <input type="hidden" name="tmdb_id" value="{{ $movie['id'] }}">
+
+                <textarea
+                    class="border-zinc-400 bg-transparent text-white focus:border-[#D0BCFF] focus:ring-[#D0BCFF] rounded-sm shadow-sm w-full my-4 h-48" 
+                    name="content" 
+                    id="content"
+                    placeholder="Escreva um comentário..."
+                ></textarea>
+
+                <div class="w-full flex items-center justify-end gap-4">
+                    <x-button variant="text" type="button" x-on:click="$dispatch('close')">
+                        Voltar
+                    </x-button>
+                    <x-button type="submit">
+                        Publicar
+                    </x-button>
+                </div>
+
+            </form>
         </x-modal>
     </section>
 </x-app-layout>

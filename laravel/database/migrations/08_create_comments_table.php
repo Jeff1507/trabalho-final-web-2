@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('comments', function (Blueprint $table) {
             $table->id();
-            $table->string('title');
+            //$table->string('title');
             $table->text('content');
             $table->boolean('isReported')->default(false);
             $table->boolean('isRemoved')->default(false);

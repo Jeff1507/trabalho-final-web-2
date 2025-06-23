@@ -10,6 +10,7 @@ class Comment extends Model
 
     protected $fillable = [
         'content',
+        'isReported',
         'isRemoved',
         'review_id'
     ];

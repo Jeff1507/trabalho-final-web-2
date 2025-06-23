@@ -10,8 +10,8 @@ class Review extends Model
 
     protected $fillable = [
         'rating',
-        'user_id',
-        'movie_id'
+        'tmdb_id',
+        'user_id'
     ];
 
     public function user() {

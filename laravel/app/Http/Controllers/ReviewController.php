@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Comment;
 use App\Models\Review;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -31,7 +32,32 @@ class ReviewController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        try {
+            $request->validate([
+                'rating' => 'required|integer|min:1|max:5',
+                'content' => 'nullable|string|max:255',
+                'tmdb_id' => 'required|string'
+            ]);
+
+            $review = Review::create([
+                'rating' => $request->rating,
+                'tmdb_id' => $request->tmdb_id,
+                'user_id' => Auth::user()->id
+            ]);
+
+            if ($request->content) {
+                Comment::create([
+                    'content' => $request->content,
+                    'isReported' => false,
+                    'isRemoved' => false,
+                    'review_id' => $review->id
+                ]);
+            }
+
+            return back()->with('success', 'Avaliação enviada com sucesso!');
+        } catch (\Throwable $th) {
+            return back()->with('error', 'Erro: ' . $th->getMessage());
+        }
     }
 
     /**
