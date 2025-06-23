@@ -45,7 +45,7 @@
                                 {{ $user_list->name }}
                             </h3>
                             <p class="text-zinc-400 text-sm sm:text-base mb-4 sm:mb-8">
-                                12 filmes
+                                {{ $user_list->movies_count ? $user_list->movies_count . ' filme(s)' : 'Lista vazia' }}
                             </p>
                             <x-button class="w-full rounded-xl" onclick="window.location.href='{{ route('movies-list.show', $user_list->id) }}'">
                                 Ver lista completa

@@ -19,7 +19,7 @@ class UserListController extends Controller
     public function index()
     {
         $user = Auth::user();
-        $userLists = UserList::where('user_id', $user->id)->get();
+        $userLists = UserList::withCount('movies')->where('user_id', $user->id)->get();
         return view('movies-list.index')->with(['user_lists'=>$userLists]);
     }
 
@@ -68,7 +68,7 @@ class UserListController extends Controller
      */
     public function show(string $id)
     {
-        $user_list = UserList::findOrFail($id);
+        $user_list = UserList::withCount('movies')->findOrfail($id);
 
         $user = Auth::user();
         if ($user_list->user_id !== $user->id) {
@@ -76,7 +76,7 @@ class UserListController extends Controller
         }
 
         $movies = $user_list->movies;
-        //$movies = UserListMovie::with(['movie'])->where('user_list_id', $user_list->id)->get();
+
         return view('movies-list.show')->with(['user_list'=>$user_list, 'movies'=>$movies]);
     }
 

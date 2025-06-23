@@ -9,7 +9,7 @@
                 {{ session('error') }}
             </x-alert>
         @endif
-        <div class="w-full flex items-center gap-8">
+        <div class="w-full flex flex-col sm:flex-row items-center gap-4 sm:gap-8">
             <div class="aspect-square bg-zinc-800 size-56 sm:size-80 flex items-center justify-center rounded-2xl overflow-hidden">
                 @if($user_list->img)
                     <img class="w-full object-cover" src="{{ asset('storage/' . $user_list->img) }}" alt="Imagem da lista">
@@ -43,11 +43,11 @@
                     <div class="flex items-center gap-2">
                         <x-heroicon-c-video-camera class="w-5 h-5 text-zinc-200" />
                         <p class="text-xs sm:text-sm text-zinc-400 font-semibold">
-                            12 filmes
+                            {{ $user_list->movies_count }} filme(s)
                         </p>
                     </div>
                 </div>
-                <div class="w-full flex items-center gap-4 mt-8">
+                <div class="w-full flex flex-wrap items-center gap-2 sm:gap-4 mt-4 sm:mt-8">
                     <x-button onclick="window.location.href='{{ route('movie.search') }}'">
                         <x-heroicon-m-plus class="w-5 h-5 mr-2"/>
                         Adicionar filmes
