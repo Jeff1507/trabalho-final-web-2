@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Comment;
 use App\Models\Movie;
 use App\Models\Review;
 use App\Models\UserList;
@@ -35,7 +36,7 @@ class MovieController extends Controller
     {
         $movie = $tmdb->getMovie($id);
 
-        $reviews = Review::where('tmdb_id', $movie['id'])->get();
+        $reviews = Review::with('comment')->where('tmdb_id', $movie['id'])->get();
 
         $user_lists = UserList::where('user_id', Auth::user()->id)->get();
 

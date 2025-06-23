@@ -67,7 +67,7 @@
             @endcan
         </div>
     </section>
-    <section class="flex flex-col gap-12 mt-32">
+    <section class="flex flex-col mt-32">
         <x-button type="button" 
                         x-data="" 
                         x-on:click.prevent="$dispatch('open-modal', 'add-review')"
@@ -75,6 +75,36 @@
                        review
                     </x-button>
         @foreach ($reviews as $review)
+            <div class="flex gap-4 border-b border-zinc-400 py-8">
+                <x-heroicon-s-user-circle class="w-14 h-14 text-zinc-200"/>
+                <div class="flex flex-col gap-1 flex-1">
+                    <div class="w-full flex items-center justify-between">
+                        <p class="text-zinc-200 text-sm font-medium">
+                            {{ $review->user->name }}
+                        </p>
+                        <p class="text-zinc-400 text-sm">
+                            {{ $review->created_at->diffForHumans() }}
+                        </p>
+                    </div>
+                    <div class="flex items-center gap-1">
+                        @for($i = 1; $i <= 5; $i++)
+                            @if ($i <= $review->rating)
+                                <x-heroicon-c-star class="w-4 h-4 text-yellow-400" />
+                            @else
+                                <x-heroicon-c-star class="w-4 h-4 text-zinc-400" />
+                            @endif
+                        @endfor
+                    </div>
+                    <p class="text-sm text-zinc-400 mt-4">
+                        @if ($review->comment)
+                            {{ $review->comment->content }}
+                        @else
+                            Nenhum comentario adicionado!
+                        @endif
+                    </p>
+                </div>
+            </div>
+        {{-- 
             <div class="flex flex-col gap-2">
                 <div class="flex items-center gap-2">
                     <x-heroicon-s-user-circle class="w-14 h-14 text-zinc-200"/>
@@ -101,10 +131,14 @@
                     </div>
                 </div>
                 <p class="text-sm text-zinc-400">
-                    
-                    Nenhum comentario adicionado!
+                    @if ($review->comment)
+                        {{ $review->comment->content }}
+                    @else
+                        Nenhum comentario adicionado!
+                    @endif
                 </p>
             </div>
+            --}}
         @endforeach
 
         {{-- MODAL PARA MOSTRAR AS LISTAS --}}
