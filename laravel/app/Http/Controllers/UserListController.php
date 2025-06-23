@@ -18,6 +18,7 @@ class UserListController extends Controller
 
     public function index()
     {
+        $this->authorize('hasFullPermission', UserList::class);
         $user = Auth::user();
         $userLists = UserList::withCount('movies')->where('user_id', $user->id)->get();
         return view('movies-list.index')->with(['user_lists'=>$userLists]);
@@ -28,6 +29,7 @@ class UserListController extends Controller
      */
     public function create()
     {
+        $this->authorize('hasFullPermission', UserList::class);
         return view('movies-list.create');
     }
 
@@ -36,6 +38,7 @@ class UserListController extends Controller
      */
     public function store(Request $request)
     {
+        $this->authorize('hasFullPermission', UserList::class);
         $request->validate([
             'name' => 'required|string|min:3',
             'img' => 'nullable|image|max:2048',
@@ -68,6 +71,7 @@ class UserListController extends Controller
      */
     public function show(string $id)
     {
+        $this->authorize('hasFullPermission', UserList::class);
         $user_list = UserList::withCount('movies')->findOrfail($id);
 
         $user = Auth::user();
@@ -85,6 +89,7 @@ class UserListController extends Controller
      */
     public function edit(string $id)
     {   
+        $this->authorize('hasFullPermission', UserList::class);
         $user_list = UserList::findOrFail($id);
         $user = Auth::user();
         if ($user_list->user_id !== $user->id) {
@@ -98,6 +103,7 @@ class UserListController extends Controller
      */
     public function update(Request $request, string $id)
     {
+        $this->authorize('hasFullPermission', UserList::class);
         $user = Auth::user();
         $user_list = UserList::findOrFail($id);
 
@@ -138,6 +144,7 @@ class UserListController extends Controller
      */
     public function destroy(string $id)
     {
+        $this->authorize('hasFullPermission', UserList::class);
         $user = Auth::user();
         $user_list = UserList::findOrFail($id);
         if ($user_list->user_id !== $user->id) {
@@ -154,6 +161,8 @@ class UserListController extends Controller
     }
 
     public function removeMovieFromList(string $user_list_id, string $movie_id)  {
+        $this->authorize('hasFullPermission', UserList::class);
+        
         UserListMovie::where([
             'user_list_id'=>$user_list_id, 
             'movie_id'=>$movie_id

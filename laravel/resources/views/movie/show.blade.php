@@ -57,14 +57,16 @@
                     </p>
                 </div>
             </div>
-            <div class="w-full mt-4">
-                <x-button type="button" 
-                    x-data="" 
-                    x-on:click.prevent="$dispatch('open-modal', 'add-movie')"
-                >
-                    Adicionar a uma lista
-                </x-button>
-            </div>    
+            @can('hasAddToListPermission', App\Models\Movie::class)
+                <div class="w-full mt-4">
+                    <x-button type="button" 
+                        x-data="" 
+                        x-on:click.prevent="$dispatch('open-modal', 'add-movie')"
+                    >
+                        Adicionar a uma lista
+                    </x-button>
+                </div>    
+            @endcan
         </div>
     </section>
     <section class="flex flex-col gap-12 mt-16">

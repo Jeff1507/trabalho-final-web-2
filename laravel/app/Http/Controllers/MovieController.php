@@ -49,6 +49,7 @@ class MovieController extends Controller
     }
 
     public function addToList(Request $request)  {
+        $this->authorize('hasAddToListPermission', Movie::class);
         try {
             $request->validate([
                 'user_list_id' => 'required|exists:user_lists,id',

@@ -16,10 +16,12 @@
                         <x-heroicon-m-home class="w-5 h-5 mr-2"/>
                         {{ __('Início') }}
                     </x-nav-link>
-                    <x-nav-link :href="route('movies-list.index')" :active="request()->routeIs('movies-list.index')">
-                        <x-heroicon-c-film class="w-5 h-5 mr-2"/>
-                        {{ __('Listas de filmes') }}
-                    </x-nav-link>
+                    @can('hasFullPermission', App\Models\UserList::class)
+                        <x-nav-link :href="route('movies-list.index')" :active="request()->routeIs('movies-list.index')">
+                            <x-heroicon-c-film class="w-5 h-5 mr-2"/>
+                            {{ __('Listas de filmes') }}
+                        </x-nav-link>
+                    @endcan
                     <x-nav-link :href="route('movie.search')" :active="request()->routeIs('movie.search')">
                         <x-heroicon-c-magnifying-glass class="w-5 h-5 mr-2"/>
                         {{ __('Buscar') }}
@@ -82,9 +84,11 @@
             <x-responsive-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
                 {{ __('Início') }}
             </x-responsive-nav-link>
-            <x-responsive-nav-link :href="route('movies-list.index')" :active="request()->routeIs('movies-list.index')">
-                {{ __('Listas de filmes') }}
-            </x-responsive-nav-link>
+            @can('hasFullPermission', App\Models\UserList::class)
+                <x-responsive-nav-link :href="route('movies-list.index')" :active="request()->routeIs('movies-list.index')">
+                    {{ __('Listas de filmes') }}
+                </x-responsive-nav-link>
+            @endcan
             <x-responsive-nav-link :href="route('movie.search')" :active="request()->routeIs('movie.search')">
                 {{ __('Buscar') }}
             </x-responsive-nav-link>
