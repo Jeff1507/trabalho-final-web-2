@@ -38,7 +38,7 @@ class MovieController extends Controller
 
         $reviews = Review::with('comment')->where('tmdb_id', $movie['id'])->get();
 
-        $user_lists = UserList::where('user_id', Auth::user()->id)->get();
+        $user_lists = UserList::with(['movies'])->where('user_id', Auth::user()->id)->get();
 
         $directors = collect($movie['credits']['crew'])
             ->where('job', 'Director')

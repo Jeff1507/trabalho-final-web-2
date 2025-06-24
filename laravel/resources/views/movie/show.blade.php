@@ -125,17 +125,19 @@
                         {{-- ACOES POR ROLE --}}
                         @if ($review->comment)
                             @can('hasReportPermission', App\Models\Comment::class)
-                                <button 
-                                    class="mt-4 flex w-max text-red-500 items-center gap-2 justify-center"
-                                    type="button" 
-                                    x-data="" 
-                                    x-on:click.prevent="$dispatch('open-modal', 'report-comment-{{ $review->comment->id }}')"
-                                >
-                                    <x-heroicon-c-exclamation-triangle class="w-5 h-5"/>
-                                    <p class="text-sm">
-                                        Reportar
-                                    </p>
-                                </button>
+                                @if (!$reviews->contains('user_id', auth()->user()->id) && ($review->comment->isRemoved == false))
+                                    <button 
+                                        class="mt-4 flex w-max text-red-500 items-center gap-2 justify-center"
+                                        type="button" 
+                                        x-data="" 
+                                        x-on:click.prevent="$dispatch('open-modal', 'report-comment-{{ $review->comment->id }}')"
+                                    >
+                                        <x-heroicon-c-exclamation-triangle class="w-5 h-5"/>
+                                        <p class="text-sm">
+                                            Reportar
+                                        </p>
+                                    </button>
+                                @endif
                             @endcan
 
                             @can('hasModeratePermission', App\Models\Comment::class)
@@ -242,9 +244,16 @@
                                 <h3 class="text-sm text-zinc-200 font-bold line-clamp-2 flex-1">
                                     {{ $user_list->name }}
                                 </h3>
-                                <x-button class="h-8 w-1/3" variant="tonal" type="submit">
-                                    Salvar
-                                </x-button>
+                                @if ($user_list->movies->contains('tmdb_id', $movie['id']))
+                                    <p class="flex items-center gap-2 text-sm text-green-500 font-semibold">
+                                        Salvo
+                                        <x-heroicon-m-check-circle class="w-6 h-6 text-green-500"/>
+                                    </p>
+                                @else
+                                    <x-button class="h-8 w-1/3" variant="tonal" type="submit">
+                                        Salvar
+                                    </x-button>
+                                @endif
                             </div>
                         </form>
                     @endforeach
