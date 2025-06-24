@@ -15,19 +15,11 @@ class CommentPolicy
         //
     }
 
-    public function hasCommentPermission() {
-        return Permissions::isAuthorized('user');
-    }
-
     public function hasReportPermission() {
         return Permissions::isAuthorized('user');
     }
 
-    public function hasRemovePermission() {
-        return Permissions::isAuthorized('admin');
-    }
-
-    public function hasValidatePermission() {
+    public function hasModeratePermission() {
         return Permissions::isAuthorized('admin');
     }
 }

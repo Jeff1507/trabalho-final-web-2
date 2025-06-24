@@ -22,6 +22,12 @@
                             {{ __('Listas de filmes') }}
                         </x-nav-link>
                     @endcan
+                    @can('hasModeratePermission', App\Models\Comment::class)
+                        <x-nav-link :href="route('comment.reported')" :active="request()->routeIs('comment.reported')">
+                            <x-heroicon-c-exclamation-triangle class="w-5 h-5 mr-2"/>
+                            {{ __('Comentários reportados') }}
+                        </x-nav-link>
+                    @endcan
                     <x-nav-link :href="route('movie.search')" :active="request()->routeIs('movie.search')">
                         <x-heroicon-c-magnifying-glass class="w-5 h-5 mr-2"/>
                         {{ __('Buscar') }}
@@ -87,6 +93,11 @@
             @can('hasFullPermission', App\Models\UserList::class)
                 <x-responsive-nav-link :href="route('movies-list.index')" :active="request()->routeIs('movies-list.index')">
                     {{ __('Listas de filmes') }}
+                </x-responsive-nav-link>
+            @endcan
+            @can('hasModeratePermission', App\Models\Comment::class)
+                <x-responsive-nav-link :href="route('comment.reported')" :active="request()->routeIs('comment.reported')">
+                    {{ __('Comentários reportados') }}
                 </x-responsive-nav-link>
             @endcan
             <x-responsive-nav-link :href="route('movie.search')" :active="request()->routeIs('movie.search')">

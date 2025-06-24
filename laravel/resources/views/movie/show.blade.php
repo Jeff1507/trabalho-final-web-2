@@ -56,90 +56,158 @@
                 </div>
             </div>
             @can('hasAddToListPermission', App\Models\Movie::class)
-                <div class="w-full mt-4">
+                <div class="w-full flex items-center gap-4 mt-4">
                     <x-button type="button" 
                         x-data="" 
                         x-on:click.prevent="$dispatch('open-modal', 'add-movie')"
                     >
                         Adicionar a uma lista
                     </x-button>
+                    @if (!$reviews->contains('user_id', auth()->user()->id))
+                        @can('hasFullPermission', App\Models\Review::class)
+                            <x-button 
+                                variant="tonal"
+                                type="button" 
+                                x-data="" 
+                                x-on:click.prevent="$dispatch('open-modal', 'add-review')"
+                            >
+                                Avaliar esse filme
+                            </x-button>
+                        @endcan
+                    @endif
                 </div>    
             @endcan
         </div>
     </section>
     <section class="flex flex-col mt-32">
-        <x-button type="button" 
-                        x-data="" 
-                        x-on:click.prevent="$dispatch('open-modal', 'add-review')"
-                    >
-                       review
-                    </x-button>
-        @foreach ($reviews as $review)
-            <div class="flex gap-4 border-b border-zinc-400 py-8">
-                <x-heroicon-s-user-circle class="w-14 h-14 text-zinc-200"/>
-                <div class="flex flex-col gap-1 flex-1">
-                    <div class="w-full flex items-center justify-between">
-                        <p class="text-zinc-200 text-sm font-medium">
-                            {{ $review->user->name }}
-                        </p>
-                        <p class="text-zinc-400 text-sm">
-                            {{ $review->created_at->diffForHumans() }}
-                        </p>
-                    </div>
-                    <div class="flex items-center gap-1">
-                        @for($i = 1; $i <= 5; $i++)
-                            @if ($i <= $review->rating)
-                                <x-heroicon-c-star class="w-4 h-4 text-yellow-400" />
-                            @else
-                                <x-heroicon-c-star class="w-4 h-4 text-zinc-400" />
-                            @endif
-                        @endfor
-                    </div>
-                    <p class="text-sm text-zinc-400 mt-4">
-                        @if ($review->comment)
-                            {{ $review->comment->content }}
-                        @else
-                            Nenhum comentario adicionado!
-                        @endif
-                    </p>
-                </div>
-            </div>
-        {{-- 
-            <div class="flex flex-col gap-2">
-                <div class="flex items-center gap-2">
+        @if ($reviews->isEmpty())
+            <x-not-found>
+                Nenhuma avaliação feita!
+            </x-not-found>
+        @else
+            <x-title>
+                Avaliações
+            </x-title>
+            <hr class="mt-8 h-px w-full border-zinc-400">
+            @foreach ($reviews as $review)
+                <div class="flex gap-4 border-b border-zinc-400 py-8">
                     <x-heroicon-s-user-circle class="w-14 h-14 text-zinc-200"/>
-                    <div class="flex-1 flex items-center justify-between">
-                        <div class="space-y-1">
-                            <p class="text-zinc-200 text-sm font-semibold">
+                    <div class="flex flex-col gap-1 flex-1">
+                        <div class="w-full flex items-center justify-between">
+                            <p class="text-zinc-200 text-sm font-medium">
                                 {{ $review->user->name }}
                             </p>
-                            <div class="flex items-center gap-2">
-                                <div class="flex items-center gap-1">
-                                    @for($i = 1; $i <= 5; $i++)
-                                        @if ($i <= $review->rating)
-                                            <x-heroicon-c-star class="w-2.5 h-2.5 text-yellow-400" />
-                                        @else
-                                            <x-heroicon-c-star class="w-2.5 h-2.5 text-zinc-400" />
-                                        @endif
-                                    @endfor
-                                </div>
-                            </div>
+                            <p class="text-zinc-400 text-sm">
+                                {{ $review->created_at->diffForHumans() }}
+                            </p>
                         </div>
-                        <p class="text-zinc-400 text-sm">
-                            {{ $review->created_at->diffForHumans() }}
+                        <div class="flex items-center gap-1">
+                            @for($i = 1; $i <= 5; $i++)
+                                @if ($i <= $review->rating)
+                                    <x-heroicon-c-star class="w-4 h-4 text-yellow-400" />
+                                @else
+                                    <x-heroicon-c-star class="w-4 h-4 text-zinc-400" />
+                                @endif
+                            @endfor
+                        </div>
+                        <p class="text-sm text-zinc-400 mt-4">
+                            @if ($review->comment)
+                                @if ($review->comment->isRemoved == true)
+                                    Comentário removido pela moderação!
+                                @else
+                                    {{ $review->comment->content }}
+                                @endif
+                            @else
+                                Nenhum comentario adicionado!
+                            @endif
                         </p>
+
+                        {{-- ACOES POR ROLE --}}
+                        @if ($review->comment)
+                            @can('hasReportPermission', App\Models\Comment::class)
+                                <button 
+                                    class="mt-4 flex w-max text-red-500 items-center gap-2 justify-center"
+                                    type="button" 
+                                    x-data="" 
+                                    x-on:click.prevent="$dispatch('open-modal', 'report-comment-{{ $review->comment->id }}')"
+                                >
+                                    <x-heroicon-c-exclamation-triangle class="w-5 h-5"/>
+                                    <p class="text-sm">
+                                        Reportar
+                                    </p>
+                                </button>
+                            @endcan
+
+                            @can('hasModeratePermission', App\Models\Comment::class)
+                                @if ($review->comment && !$review->comment->isRemoved)
+                                    <button 
+                                        class="mt-4 flex w-max text-red-500 items-center gap-2 justify-center"
+                                        type="button" 
+                                        x-data="" 
+                                        x-on:click.prevent="$dispatch('open-modal', 'remove-comment-{{ $review->comment->id }}')"
+                                    >
+                                        <x-heroicon-s-trash class="w-5 h-5"/>
+                                        <p class="text-sm">
+                                            Remover
+                                        </p>
+                                    </button>
+                                @endif
+                            @endcan
+                        @endif
+                        {{--  --}}
                     </div>
                 </div>
-                <p class="text-sm text-zinc-400">
-                    @if ($review->comment)
-                        {{ $review->comment->content }}
-                    @else
-                        Nenhum comentario adicionado!
-                    @endif
-                </p>
-            </div>
-            --}}
-        @endforeach
+
+                {{-- MODAL PARA REPORTAR COMENTARIOS --}}
+                @if ($review->comment)
+                    <x-modal name="report-comment-{{ $review->comment->id }}" focusable maxWidth="lg">
+                        <div class="p-6 flex flex-col gap-4">
+                            <h2 class="text-2xl text-zinc-200 font-medium tracking-wide">
+                                Deseja reportar esse comentário?
+                            </h2>
+                            <p class="text-sm text-zinc-400">
+                                Esse comentário será enviado para moderação julgar se será ou não removido das avaliações.
+                            </p>
+                            <form action="{{ route('comment.report', $review->comment->id) }}" method="POST" class="w-full flex items-center justify-end gap-4">
+                                @csrf
+                                <x-button variant="text" type="button" x-on:click="$dispatch('close')">
+                                    Voltar
+                                </x-button>
+                                <x-button type="submit">
+                                    Reportar
+                                </x-button>
+                            </form>
+                        </div>
+                    </x-modal>
+                @endif
+                {{--  --}}
+
+                {{-- MODAL PARA REMOVER COMENTARIOS --}}
+                @if ($review->comment)
+                    <x-modal name="remove-comment-{{ $review->comment->id }}" focusable maxWidth="lg">
+                        <div class="p-6 flex flex-col gap-4">
+                            <h2 class="text-2xl text-zinc-200 font-medium tracking-wide">
+                                Deseja remover esse comentário?
+                            </h2>
+                            <p class="text-sm text-zinc-400">
+                                Esse comentário não será mais mostrado da seção de avaliações.
+                            </p>
+                            <form action="{{ route('comment.remove', $review->comment->id) }}" method="POST" class="w-full flex items-center justify-end gap-4">
+                                @csrf
+                                <x-button variant="text" type="button" x-on:click="$dispatch('close')">
+                                    Voltar
+                                </x-button>
+                                <x-button type="submit">
+                                    Remover
+                                </x-button>
+                            </form>
+                        </div>
+                    </x-modal>
+                @endif
+                {{--  --}}
+            @endforeach
+        @endif
+        
 
         {{-- MODAL PARA MOSTRAR AS LISTAS --}}
         <x-modal name="add-movie" focusable maxWidth="lg">

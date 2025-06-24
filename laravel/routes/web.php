@@ -1,6 +1,7 @@
 <?php
 
 use App\Facades\Permissions;
+use App\Http\Controllers\CommentController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\UserListController;
@@ -24,6 +25,10 @@ Route::middleware('auth')->group(function () {
     Route::delete('/movies-list/{user_list_id}/{movie_id}', [UserListController::class, 'removeMovieFromList'])->name('movies-list.removeMovieFromList');
 
     Route::post('/movie/review', [ReviewController::class, 'store'])->name('review.store');
+
+    Route::post('/movie/review/report-comment/{id}', [CommentController::class, 'reportComment'])->name('comment.report');
+    Route::get('/comments/reported-comments', [CommentController::class, 'reportedComments'])->name('comment.reported');
+    Route::post('/comments/remove-comment/{id}', [CommentController::class, 'removeComment'])->name('comment.remove');
 
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');

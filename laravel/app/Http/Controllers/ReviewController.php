@@ -32,6 +32,7 @@ class ReviewController extends Controller
      */
     public function store(Request $request)
     {
+        $this->authorize('hasFullPermission', Review::class);
         try {
             $request->validate([
                 'rating' => 'required|integer|min:1|max:5',
