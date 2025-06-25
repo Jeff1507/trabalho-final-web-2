@@ -125,7 +125,7 @@
                         {{-- ACOES POR ROLE --}}
                         @if ($review->comment)
                             @can('hasReportPermission', App\Models\Comment::class)
-                                @if (!$reviews->contains('user_id', auth()->user()->id) && ($review->comment->isRemoved == false))
+                                @if ($review->user->id !== auth()->user()->id && $review->comment->isRemoved == false)
                                     <button 
                                         class="mt-4 flex w-max text-red-500 items-center gap-2 justify-center"
                                         type="button" 
